@@ -1,0 +1,172 @@
+{% extends "admin/admin_base.html" %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{{url_for('static',filename='report_analytics.css')}}">
+{% endblock %}
+  
+
+{% block admin_content %}
+<div class="container py-4">
+    <div class="card border-0 shadow-sm mb-4 no-print">
+        <div class="card-body">
+            <form class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="small fw-bold">DATE RANGE</label>
+                    <div class="input-group input-group-sm">
+                        <input type="date" name="start_date" class="form-control" value="{{ start }}">
+                        <input type="date" name="end_date" class="form-control" value="{{ end }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-sm btn-primary px-4">Filter</button>
+                    <button type="button" onclick="window.print()" class="btn btn-sm btn-danger px-4">Export PDF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3 kpi-card">
+                <small class="text-muted fw-bold">TOTAL REVENUE (PERIOD)</small>
+                <h2 class="fw-bold text-primary">£{{ "{:,.2f}".format(sales|sum(attribute='revenue')) }}</h2>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">CONFIRMED BOOKINGS</h6>
+            <h3 class="fw-bold text-success">{{counts.confirmed}}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Pending BOOKINGS</h6>
+            <h3 class="fw-bold text-success">{{ counts.pending }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Cancelled BOOKINGS</h6>
+            <h3 class="fw-bold text-success">{{ counts.cancelled }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Completed BOOKINGS</h6>
+            <h3 class="fw-bold text-success">{{ counts.completed}}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Available Rooms</h6>
+            <h3 class="fw-bold text-success">{{ rooms.available }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Booked Rooms</h6>
+            <h3 class="fw-bold text-success">{{ rooms.booked }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Maintenance</h6>
+            <h3 class="fw-bold text-primary">{{ rooms.maintenance }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">Occupancy Rate</h6>
+            <h3 class="fw-bold text-primary">{{occupancy_rate }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+            <h6 class="text-muted small">WAITING PAYMENT</h6>
+            <h3 class="fw-bold text-warning">{{counts.pending }}</h3>
+        </div>
+    </div>
+</div>
+
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <h6 class="fw-bold mb-3">REVENUE GROWTH</h6>
+                <canvas id="revChart" height="250"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <h6 class="fw-bold mb-3">HOTEL PERFORMANCE</h6>
+                {% for h in hotels %}
+                <div class="d-flex justify-content-between mb-2">
+                    <span >{{ h.name }}</span>
+                    <span class="badge {% if h.profit > 0 %}bg-success-subtle text-success{% else %}bg-danger-subtle text-danger{% endif %}">
+                        £{{ "{:,.0f}".format(h.profit) }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden table-responsive-global">
+        <table class="table table-striped table-bordered table-hover mb-0 w-100">
+            <thead >
+                <tr>
+                    <th class="ps-4">Customer Name</th>
+                    <th>Email</th>
+                    <th>Total Spend</th>
+                    <th>Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for level in loyalty_level %}
+                <tr>
+                    <td data-label="Full Name">{{ level.fullname }}</td>
+                    <td data-label="Email">{{ level.email }}</td>
+                    <td data-label="Total Spend" class="fw-bold">£{{ level.total_spend | round(2) }}</td>
+                    <td data-label="Level">
+                        <span class="badge {% if level.loyalty_tier == 'VIP' %}bg-primary{% elif level.loyalty_tier == 'Gold' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                            {{ level.loyalty_tier }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    new Chart(document.getElementById('revChart'), {
+        type: 'line',
+        data: {
+            labels: [{% for s in sales %}"{{ s.label }}",{% endfor %}],
+            datasets: [{
+                data: [{% for s in sales %}{{ s.revenue }},{% endfor %}],
+                borderColor: '#0d6efd',
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(13,110,253,0.05)'
+            }]
+        },
+        options: { plugins: { legend: { display: false } }, animation: { duration: 0 } }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block main %}
+
+<div class="container my-5 py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+          <!-- Header -->
+          <div class="text-center mb-5">
+            <h1 class="fw-bold">Privacy Policy</h1>
+            <p class="text-muted mb-0">Last Updated: January 2026</p>
+          </div>
+
+          <!-- 1. Data Collection -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🔐 1. Data Collection</h5>
+            <p>
+              In accordance with the <strong>Data Protection Act (DPA)</strong> and
+              <strong>GDPR</strong>, this Hotel Management System collects only the
+              minimum personal data required to provide booking services.
+            </p>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item"><strong>Personal Identifiers:</strong> Name, email address</li>
+              <li class="list-group-item"><strong>Account Data:</strong> Login credentials (hashed)</li>
+              <li class="list-group-item"><strong>Booking Data:</strong> Dates, room type, guests, price</li>
+              <li class="list-group-item"><strong>Payment Status:</strong> Paid / Pending (no card storage)</li>
+            </ul>
+          </section>
+
+          <!-- 2. Purpose -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🎯 2. Purpose of Processing</h5>
+            <p>
+              Your data is used strictly to:
+            </p>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item">Process hotel bookings</li>
+              <li class="list-group-item">Send booking confirmations & receipts</li>
+              <li class="list-group-item">Provide customer support</li>
+            </ul>
+            <p class="mt-2 text-muted">
+              We do <strong>not</strong> sell, rent, or use your data for advertising or profiling.
+            </p>
+          </section>
+
+          <!-- 3. Legal Basis -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">⚖️ 3. Legal Basis for Processing</h5>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item"><strong>Contract:</strong> To fulfill hotel bookings</li>
+              <li class="list-group-item"><strong>Consent:</strong> When you submit forms</li>
+              <li class="list-group-item"><strong>Legal Obligation:</strong> For record keeping</li>
+            </ul>
+          </section>
+
+          <!-- 4. Your Rights -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🗑️ 4. Your Rights</h5>
+            <p>You have the right to:</p>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item">Access your personal data</li>
+              <li class="list-group-item">Correct inaccurate data</li>
+              <li class="list-group-item">Delete your account (Right to Erasure)</li>
+              <li class="list-group-item">Restrict or object to processing</li>
+            </ul>
+            <p class="text-muted small mt-2">
+              Deleting your account removes all associated bookings permanently.
+            </p>
+          </section>
+
+          <!-- 5. Data Retention -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">⏳ 5. Data Retention</h5>
+            <p>
+              We retain your data only for as long as needed to fulfill bookings and
+              legal obligations. Inactive accounts may be removed after a defined period.
+            </p>
+          </section>
+
+          <!-- 6. Cookies -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🍪 6. Cookies & Sessions</h5>
+            <p>
+              We use session cookies to maintain login state and protect against CSRF attacks.
+              No tracking or advertising cookies are used.
+            </p>
+          </section>
+
+          <!-- 7. Third Parties -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🔗 7. Third-Party Services</h5>
+            <p>
+              We use secure third-party services for essential operations such as:
+            </p>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item">Email delivery (Flask-Mail)</li>
+              <li class="list-group-item">Payment processing (if enabled)</li>
+            </ul>
+            <p class="text-muted mt-2">
+              All third parties comply with data protection regulations.
+            </p>
+          </section>
+
+          <!-- 8. Security -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🛡️ 8. Security Measures</h5>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item"><strong>Password Hashing:</strong> PBKDF2 with salt</li>
+              <li class="list-group-item"><strong>CSRF Protection:</strong> Token-based validation</li>
+              <li class="list-group-item"><strong>Rate Limiting:</strong> Login & reset protection</li>
+              <li class="list-group-item"><strong>RBAC:</strong> Admin vs User roles</li>
+            </ul>
+          </section>
+
+          <!-- 9. Contact -->
+          <section class="mb-4">
+            <h5 class="fw-semibold mb-3">📩 9. Contact</h5>
+            <p>
+              For any privacy-related concerns, contact us at:
+              <strong>privacy@yourhotelapp.com</strong>
+            </p>
+          </section>
+
+          <!-- Action -->
+          <div class="text-center mt-4">
+            <a href="{{ url_for('public.home') }}" class="btn btn-primary px-4 py-2">
+              ← Return to Home
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

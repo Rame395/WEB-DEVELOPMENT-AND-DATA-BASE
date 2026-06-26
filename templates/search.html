@@ -1,0 +1,221 @@
+
+
+{% extends "base.html" %}
+    
+{% from "macros.html" import csrf_input %} 
+
+{% block head %}search{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='search.css')}}" />
+{% endblock %}
+
+{% block main %}
+
+
+
+<div class="container py-5 mt-5">
+  <div class="card">
+    <div class="card-body">
+    <h5 class="py-4">Search Hotels</h5>
+     <form method="POST" class="row g-3 needs-validation fs-6" novalidate>
+
+      <div class="col-md-3">
+        <label for="validationCustom04" class="form-label"><i class="fas fa-map-marker-alt me-1"></i>City</label>
+        <select class="form-select" id="validationCustom04" name="city" required>
+          <option {% if request.form.get('city') == 'All Cities' %}selected{% endif %}>All Cities</option>
+          <option {% if request.form.get('city') == 'Aberdeen' %}selected{% endif %}>Aberdeen</option>
+          <option {% if request.form.get('city') == 'Belfast' %}selected{% endif %}>Belfast</option>
+          <option {% if request.form.get('city') == 'Birmingham' %}selected{% endif %}>Birmingham</option>
+          <option {% if request.form.get('city') == 'Bristol' %}selected{% endif %}>Bristol</option>
+          <option {% if request.form.get('city') == 'Cardiff' %}selected{% endif %}>Cardiff</option>
+          <option {% if request.form.get('city') == 'Edinburgh' %}selected{% endif %}>Edinburgh</option>
+          <option {% if request.form.get('city') == 'Glasgow' %}selected{% endif %}>Glasgow</option>
+          <option {% if request.form.get('city') == 'London' %}selected{% endif %}>London</option>
+          <option {% if request.form.get('city') == 'Manchester' %}selected{% endif %}>Manchester</option>
+          <option {% if request.form.get('city') == 'New Castle' %}selected{% endif %}>New Castle</option>
+          <option {% if request.form.get('city') == 'Norwich' %}selected{% endif %}>Norwich</option>
+          <option {% if request.form.get('city') == 'Nottingham' %}selected{% endif %}>Nottingham</option>
+          <option {% if request.form.get('city') == 'Oxford' %}selected{% endif %}>Oxford</option>
+          <option {% if request.form.get('city') == 'Plymouth' %}selected{% endif %}>Plymouth</option>
+          <option {% if request.form.get('city') == 'Swansea' %}selected{% endif %}>Swansea</option>
+          <option {% if request.form.get('city') == 'Bournemouth' %}selected{% endif %}>Bournemouth</option>
+          <option {% if request.form.get('city') == 'Kent' %}selected{% endif %}>Kent</option>
+        </select>
+      </div>
+        
+    
+
+      <div class="col-md-3">
+        <label for="todayDate" class="form-label"><i class="fas fa-calendar-alt me-1"></i>Check-in</label>
+        <input type="date" class="form-control" id="todayDate" name="check_in" 
+          value="{{ request.form.get('check_in') }}" required>
+          <div class="invalid-feedback">
+           Please choose a date within the next 90 days.
+        </div>
+      </div>
+    
+
+      <div class="col-md-3">
+        <label for="tomorrowDate" class="form-label"><i class="fas fa-calendar-alt me-1"></i>Check-out</label>
+        <input type="date" class="form-control" id="tomorrowDate" name="check_out" 
+           value="{{ request.form.get('check_out') }}" required>
+      </div>
+    
+
+     <div class="col-md-3">
+      <label for="roomTypeSelect" class="form-label"><i class="fas fa-bed me-2"></i> Room Type</label>
+      <select class="form-select" id="roomTypeSelect" name="room_type" required>
+          <option value="Standard" {% if request.form.get('room_type') == 'Standard' %}selected{% endif %}>Standard</option>
+          <option value="Family" {% if request.form.get('room_type') == 'Family' %}selected{% endif %}>Family</option>
+          <option value="Double" {% if request.form.get('room_type') == 'Double' %}selected{% endif %}>Double</option>
+      </select>
+    </div>
+      
+    
+
+ 
+
+    <div class="col-md-3">
+    <label for="validationCustom04" class="form-label">Guests</label>
+      <select class="form-select" name="guests" required>
+        {% for i in range(1, 5) %}
+        <option value="{{ i }}" {% if request.form.get('guests')|int == i %}selected{% endif %}>
+            {{ i }} Guest{{ "s" if i > 1 else "" }}
+        </option>
+    {% endfor %}
+    </select>
+       
+  </div>
+
+     <div class="col-md-6">
+        <label class="form-label">Payment Currency</label>
+        <select class="form-select" name="currency" required>
+            <option value="GBP">GBP (£)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="NPR">NPR (रू)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="JPY">JPY (¥)</option>
+            <option value="AUD">AUD (A$)</option>
+            <option value="CAD">CAD (C$)</option>
+            <option value="CHF">CHF</option>
+            <option value="CNY">CNY (¥)</option>
+            
+        </select>
+      </div>
+              
+
+    
+ {{ csrf_input() }} 
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i>Search</button>
+  </div>
+</form>
+ 
+</div>
+</div>
+</div>
+
+
+
+          
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    const searchForm = document.querySelector('.needs-validation');
+    const todayInput = document.getElementById('todayDate');
+    const tomorrowInput = document.getElementById('tomorrowDate');
+
+    // --- 1. DATE CONFIGURATION ---
+    const today = new Date();
+    
+ 
+    const maxDate = new Date();
+    maxDate.setDate(today.getDate() + 90); 
+
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+
+    const todayStr = formatDate(today);
+    const maxDateStr = formatDate(maxDate);
+    
+   
+    if (todayInput) {
+        todayInput.min = todayStr; // Cannot select yesterday
+        todayInput.max = maxDateStr; // Cannot book more than 80 days ahead
+        if (!todayInput.value) todayInput.value = todayStr;
+    }
+
+  
+    if (tomorrowInput) {
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        
+        tomorrowInput.min = formatDate(tomorrow);
+        
+        const checkoutMax = new Date(maxDate);
+        checkoutMax.setDate(maxDate.getDate() + 1);
+        tomorrowInput.max = formatDate(checkoutMax);
+        
+        if (!tomorrowInput.value) tomorrowInput.value = formatDate(tomorrow);
+    }
+
+   
+    todayInput.addEventListener('change', () => {
+        const selectedDate = new Date(todayInput.value);
+        const nextDay = new Date(selectedDate);
+        nextDay.setDate(selectedDate.getDate() + 1);
+        
+        tomorrowInput.min = formatDate(nextDay);
+        
+        
+        const newMax = new Date(selectedDate);
+        newMax.setDate(selectedDate.getDate() + 30); 
+        
+        if (new Date(tomorrowInput.value) <= selectedDate) {
+            tomorrowInput.value = formatDate(nextDay);
+        }
+    });
+
+    // --- 2. BOOTSTRAP VALIDATION ---
+    searchForm.addEventListener('submit', function (event) {
+        const checkIn = new Date(todayInput.value);
+        const checkOut = new Date(tomorrowInput.value);
+
+        // Custom Validation: Range check (80 days)
+        const diffTime = Math.abs(checkIn - today);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays > 90) {
+            todayInput.setCustomValidity("Bookings are limited to 90 days in advance.");
+        } else {
+            todayInput.setCustomValidity("");
+        }
+
+        if (checkOut <= checkIn) {
+            tomorrowInput.setCustomValidity("Check-out must be after check-in");
+        } else {
+            tomorrowInput.setCustomValidity("");
+        }
+
+        if (!searchForm.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+            searchForm.classList.add('was-validated');
+        }
+    }, false);
+});
+</script>
+{% endblock main %}
+
+
+
+
+   
+    
+
+
+
+
+

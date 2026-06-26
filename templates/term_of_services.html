@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block main %}
+
+<div class="container my-5 py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+       
+          <div class="text-center mb-5">
+            <h1 class="fw-bold">Terms of Service</h1>
+            <p class="text-muted mb-0">Last Updated: January 2026</p>
+          </div>
+
+          <!-- 1. Acceptance -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">📜 1. Acceptance of Terms</h5>
+            <p>
+              By accessing or using this Hotel Management System, you agree to be bound by
+              these Terms of Service. If you do not agree, you must not use the system.
+            </p>
+          </section>
+
+          <!-- 2. User Accounts -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">👤 2. User Accounts</h5>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item">You must provide accurate and complete information.</li>
+              <li class="list-group-item">You are responsible for keeping your login credentials secure.</li>
+              <li class="list-group-item">Any activity under your account is your responsibility.</li>
+            </ul>
+          </section>
+
+          <!-- 3. Bookings & Payments -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🏨 3. Bookings & Payments</h5>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item">Bookings are confirmed only after payment is completed.</li>
+              <li class="list-group-item">Unpaid bookings are automatically cancelled after 5 minutes.</li>
+              <li class="list-group-item">All prices are transparent and include all applicable charges.</li>
+            </ul>
+          </section>
+
+          <!-- 4. Cancellations & Refunds -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">💸 4. Cancellations & Refunds</h5>
+            <p>
+              Cancellation policies depend on booking time and room type. A cancellation fee may apply.
+              Refunds (if eligible) are processed based on your selected payment method.
+            </p>
+          </section>
+
+          <!-- 5. Acceptable Use -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🚫 5. Acceptable Use</h5>
+            <ul class="list-group list-group-flush c-ul">
+              <li class="list-group-item">You must not misuse the system or attempt unauthorized access.</li>
+              <li class="list-group-item">You must not upload harmful, illegal, or copyrighted content.</li>
+              <li class="list-group-item">Admin features are restricted to authorized users only.</li>
+            </ul>
+          </section>
+
+          <!-- 6. Intellectual Property -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🖼️ 6. Intellectual Property</h5>
+            <p>
+              All content, code, images, and branding are the property of this project unless stated otherwise.
+              Unauthorized copying or redistribution is prohibited.
+            </p>
+          </section>
+
+          <!-- 7. Limitation of Liability -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">⚠️ 7. Limitation of Liability</h5>
+            <p>
+              We are not responsible for any losses caused by system downtime, booking errors,
+              or third-party service failures.
+            </p>
+          </section>
+
+          <!-- 8. Termination -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">⛔ 8. Termination</h5>
+            <p>
+              We reserve the right to suspend or terminate accounts that violate these terms.
+            </p>
+          </section>
+
+          <!-- 9. Changes -->
+          <section class="mb-5">
+            <h5 class="fw-semibold mb-3">🔄 9. Changes to Terms</h5>
+            <p>
+              These Terms may be updated from time to time. Continued use means acceptance of the new terms.
+            </p>
+          </section>
+
+          <!-- 10. Contact -->
+          <section class="mb-4">
+            <h5 class="fw-semibold mb-3">📩 10. Contact</h5>
+            <p>
+              For questions regarding these Terms, contact us at:
+              <strong>support@yourhotelapp.com</strong>
+            </p>
+          </section>
+
+          <!-- Action -->
+          <div class="text-center mt-4">
+            <a href="{{ url_for('public.home') }}" class="btn btn-primary px-4 py-2">
+              ← Return to Home
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

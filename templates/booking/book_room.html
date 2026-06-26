@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_input %}
+
+{% block head %}Booking Form{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='book_room.css')}}" />
+{% endblock %}
+
+
+{% block main %}
+<div class="container py-5">
+    <h3 class="pt-5">Complete Your Booking</h3>
+    <div class="row mt-5">
+        <div class="col-xxl-8 col-xl-8 col-xl-8 col-md-8 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="pb-3">Hotel Details</h6>
+                    <div class="row">
+                    
+                        <div class="col-md-5 mb-2">
+                            <div class='hotel-img'>
+                              <img src="{{ url_for('static', filename= room.image_url) }}" alt="{{ room.hotel_name }}">
+                            </div>
+
+                            <div class='hotel-img1 mt-2 '>
+                                {% if room.room_type=='Standard'%}
+                                 <img src="{{ url_for('static', filename='images/standard_room1.jpeg' ) }}" alt="{{ room.hotel_name }}">
+                                 <img src="{{ url_for('static', filename='images/standard_room.webp' ) }}" alt="{{ room.hotel_name }}">
+                                 
+
+                                {% elif room.room_type=='Double'%}
+                                  <img src="{{ url_for('static', filename='images/double_room.jpeg' ) }}" alt="{{ room.hotel_name }}">
+                                  <img src="{{ url_for('static', filename='images/double_room.webp' ) }}" alt="{{ room.hotel_name }}">
+                                
+                                {% elif room.room_type=='Family' %}
+                                   <img src="{{ url_for('static', filename='images/family_room.jpg' ) }}" alt="{{ room.hotel_name }}">
+                                   <img src="{{ url_for('static', filename='images/family_room.jpeg' ) }}" alt="{{ room.hotel_name }}">
+                                {%endif%}
+                                </div>
+
+
+                             
+                        </div>
+                        <div class="col-md-7 mb-2 py-4">
+                            <h6>{{ room.hotel_name }}</h6>
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{room.address}} ({{room.city_name}})</p>
+                           <p> {{room.description}}</p>
+                             
+                              {% for key,value in room.default_features.items()%}
+                                {% if value %}
+                                    <span class="features-pill">{{ key|replace('_',' ')|title }}</span>
+                                {% endif %}
+                            {% endfor %}
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-xxl- col-xl-4 col-xl-4 col-md-4 col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Price Summary</h6>
+                    <div class="row ">
+                        <div class="col-md-6">
+                            <p>Base Rate</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">{{pricing.symbol}}{{pricing.price_per_night}} /night</p>
+                        </div>
+                        <div class="col-md-6 pt">
+                            <p>{{pricing.total_nights}} night(s)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">{{pricing.symbol}}{{pricing.base_price}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Room Type</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">{{room.room_type}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Discount Percent</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">{{pricing.discount_rate*100}} %</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Discount Amount</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">{{pricing.symbol}}{{pricing.discount_amount}}</p>
+                        </div>
+                        <hr>
+                         <div class="col-md-6">
+                            <h6>Total Amount</h6>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <h3 class="text-primary mb-0">
+                                {{ pricing.symbol }}{{ pricing.final_price }}
+                            </h3>
+
+                            {% if pricing.discount_amount > 0 %}
+                                <span class="badge bg-success ms-2 shadow-sm">
+                                    <i class="fa-solid fa-tag me-1"></i>
+                                    SAVE {{ pricing.symbol }}{{ pricing.discount_amount }}
+                                </span>
+                                
+                                <small class="text-muted ms-2 text-decoration-line-through">
+                                    {{ pricing.symbol }}{{ pricing.base_price }}
+                                </small>
+                            {% endif %}
+                        </div>
+
+                        {% if pricing.discount_rate > 0 %}
+                            <p class="text-success small mb-0">
+                                Early Bird Discount applied ({{ (pricing.discount_rate * 100)|int }}% off)
+                            </p>
+                        {% endif %}
+
+                        <div class="col-md-12 mb-1">
+                             <form action="{{ url_for('booking.book_room') }}" method="POST">
+                                {{ csrf_input() }}
+
+                                <input type="hidden" name="room_id" value="{{ search.room_id }}">
+                                <input type="hidden" name="hotel_id" value="{{ search.hotel_id }}">
+                                <input type="hidden" name="room_type_id" value="{{ search.room_type_id }}">
+
+                                <input type="hidden" name="check_in" value="{{ search.check_in }}">
+                                <input type="hidden" name="check_out" value="{{ search.check_out }}">
+                                <input type="hidden" name="guests" value="{{ search.guests }}">
+                                <input type="hidden" name="currency" value="{{ search.currency }}">
+
+                                <button class="btn btn-success mt-3 mb-2" type="submit">
+                                    Confirm Booking
+                                </button>
+                            </form>
+                        </div>
+                        <hr>
+                        
+                       <div class="col-md-12 mt-4">
+                            <p class="fw-bold">Early Bird Discounts</p>
+                            <p class="policy">
+                                <i class="fa fa-gift text-success" aria-hidden="true"></i> 
+                                <strong>30% Off:</strong> Book 80 to 90 days in advance
+                            </p>
+                            <p class="policy">
+                                <i class="fa fa-tag text-primary" aria-hidden="true"></i> 
+                                <strong>20% Off:</strong> Book 60 to 79 days in advance
+                            </p>
+                            <p class="policy">
+                                <i class="fa fa-tag text-info" aria-hidden="true"></i> 
+                                <strong>10% Off:</strong> Book 45 to 59 days in advance
+                            </p>
+                            <p class="policy">
+                                <i class="fa fa-clock text-muted" aria-hidden="true"></i> 
+                                Standard Rate: Bookings under 45 days
+                            </p>
+                        </div>
+                      
+                            
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+                                
+
+    <div class="row">
+        <div class="col-xxl-8 col-xl-8 col-xl-8 col-md-8 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="pb-2">Booking Information</h6>
+                    <div class="row ">
+                        <div class="col-md-6 col-sm-6">
+                            <p class="mb-1">Check In</p>
+                            <p>{{search.check_in }}</p>
+                        </div>
+                        <div class="col-md-6 mb-2 col-sm-6">
+                            <p class="mb-1">Check Out</p>
+                            <p class="fw-bold">{{search.check_out }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 mb-2">
+                            <p class="mb-1">Room Type</p>
+                            <p class="fw-bold">{{room.room_type }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 mb-2">
+                            <p class="mb-1">Guest(s)</p>
+                            <p class="fw-bold">{{search.guests }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 mb-2">
+                            <p class="mb-1">Guests</p>
+                            <p class="fw-bold">{{search.guests }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 mb-2">
+                            <p class="mb-1">Number of Nights</p>
+                            <p class="fw-bold">{{pricing.total_nights}}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row py-4">
+        <div class="col-xxl-8 col-xl-8 col-xl-8 col-md-8 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6  class="ps-2 pb-3">Guest Information</h6>
+                    <div class="row g">
+                        <div class="col-md-12 ">
+                            <p class="mb-1"></p>
+                            <p class="ps-2 fw-bold">Username</p>
+                            <p class="card shadow-sm p-1 mb-2 bg-body rounded border-light">{{session.username }}</p>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="mb-1"></p>
+                            <p class="ps-2 fw-bold">Email</p>
+                            <p class="card shadow-sm p-1 mb-2 bg-body rounded border-light">{{session.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+</div>
+{% endblock main %}
+
+
+

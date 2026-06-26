@@ -1,0 +1,73 @@
+*{
+    padding: 0;
+    margin: 0;
+   
+}
+
+.hotel-img img{
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.hotel-img1 {
+    display: grid;
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    
+}
+   
+
+.hotel-img1 img{
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    margin-top: 1rem;
+   
+}
+
+@media (max-width: 768px) {
+ .hotel-img img{
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    margin-left: 20%;
+}
+
+.hotel-img1 {
+    display: grid;
+    display: flex;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+}
+
+.features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.features-pill {
+    background-color: #f0faf7;
+    color: #0d9466;
+    border: 1px solid #e1f2ed;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 0.6rem;
+    font-weight: bold;
+}
+
+p{
+    font-size: 0.8rem;
+}
+.policy{
+    font-size: 0.7rem;
+}
+
+
+
+    

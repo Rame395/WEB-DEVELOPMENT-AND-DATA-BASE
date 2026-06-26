@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='base.css')}}" />
+    <script>
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  </script>
+    <title>{% block head %}{% endblock head %}</title>
+    {% block styles %}{% endblock %} 
+  </head>
+  <body>
+
+    <div id="offlineBanner" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #f44336;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        font-weight: bold;
+        z-index: 9999;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+      ">
+        ⚠️ You are offline. Please check your internet connection.
+      </div>
+ 
+
+  <nav id="main-navbar" class="navbar navbar-expand-lg  c-navbar">
+   <div class="container">
+    <a href="/" class="navbar-brand logo-wrapper d-flex align-items-center" aria-label="World Hotel Home">
+        <div class="logo-icon-box">
+            <i class="fa-solid fa-hotel"></i>
+        </div>
+        <div class="logo-text-group">
+            <span class="logo-main">WORLD</span>
+            <span class="logo-sub">HOTEL</span>
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-1 me-0 mb-lg-0 mx-auto p-2 column-gap-3" style="font-size:0.8rem;">
+      <li class="nav-item">
+          <a class="nav-link fw-bold" href="/home"><i class="fa-solid fa-house me-1"></i>Home</a>
+        </li>
+          
+    
+    {% if not session.get('loggedin') %}
+      <li class="nav-item">
+          <a class="nav-link fw-bold" href="{{url_for('public.about_us')}}"><i class="fas fa-concierge-bell me-1"></i>About Us</a>
+      </li>
+    {%endif%}
+    
+    <li class="nav-item">
+        <a class="nav-link fw-bold" href="{{url_for('search.search')}}"><i class="fa-solid fa-magnifying-glass me-1"></i>Search Hotels</a>
+    </li>
+
+    {% if session.get('role') == 'admin' %}
+      
+
+      <li class="nav-item">
+          <a class="nav-link fw-bold" href="{{url_for('adminPanel.admin_panel')}}" id="adminMenu" role="button" >
+              <i class="fas fa-tools fw-bold"></i> Admin Panel
+          </a>
+      </li>
+      {% endif %}
+
+      
+      
+      {% if session.get('role') == 'user' or session.get('role') == 'admin'  %}
+      <li class="nav-item">
+          <a class="nav-link fw-bold" href="{{ url_for('booking.my_booking') }}">
+              <i class="fas fa-calendar-check"></i> My Bookings
+          </a>
+      </li>
+      {% endif %}
+  
+       
+    
+  
+
+    {% if session.get('role') == 'user' %}
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-cog me-1"></i> Settings
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userMenu">
+              <li><h6 class="dropdown-header">User Account</h6></li>
+              <li><a class="dropdown-item" href="{{url_for('userProfile.userProfile')}}">
+                  <i class="fas fa-user-circle fa-fw me-2 text-muted"></i>Account Info
+              </a></li>
+              <li><a class="dropdown-item" href="{{url_for('booking.booking_history')}}">
+                  <i class="fas fa-history fa-fw me-2 text-muted"></i>Booking History
+              </a></li>
+              
+              <li><hr class="dropdown-divider"></li>
+              
+              
+              <li class="px-3 py-1">
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="themeToggle">
+                      <label class="form-check-label small" for="themeToggle">Dark Mode</label>
+                  </div>
+              </li>
+              
+              <li><hr class="dropdown-divider"></li>
+              
+              <li><a class="dropdown-item" href="/support">
+                  <i class="fas fa-question-circle fa-fw me-2 text-muted"></i>Support Center
+              </a></li>
+          </ul>
+      </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link fw-bold" href="{{url_for('public.contact_us')}}"><i class="fa-solid fa-phone me-1"></i>Contact</a>
+    </li>
+    {% endif %}
+
+    {% if session.get('role') !='admin' and session.get('role')!='user'%}
+     <li class="nav-item">
+            <a class="nav-link fw-bold" href="{{ url_for('public.gallery') }}">
+                <i class="fas fa-calendar-check"></i> Gallery
+            </a>
+      </li>
+    {% endif %}
+
+    {% if not session.get('loggedin') %}
+        <li class="nav-item">
+            <a class="nav-link fw-bold" href="/auth">
+                <button type="button" class="btn btn-success btn-sm">Login</button>
+            </a>
+        </li>
+    {% else %}
+   
+
+
+    <li class="nav-item dropdown ms-lg-auto">
+        <a class="btn dropdown-toggle border-0 fw-bold d-flex align-items-center p-1" 
+          href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="line-height: 1;">
+            
+            {% if session.profile_picture %}
+                <img src="{{ url_for('static', filename=session.profile_picture.replace('static/', '')) }}" 
+                    class="rounded-circle" width="24" height="24" style="object-fit:cover;">
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/profiles/default_profile.avif') }}" 
+                    class="rounded-circle" width="24" height="24" style="object-fit:cover;">
+            {% endif %}
+            
+            <span class="ms-2 me-1 small">{{ session.username }}</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm py-0 mt-1" style="min-width: auto;">
+            <li>
+              <a class="dropdown-item text-danger d-flex align-items-center py-1 small" href="{{ url_for('auth.logout') }}">
+                  <i class="fas fa-sign-out-alt me-2" style="font-size: 0.85rem;"></i> Logout
+              </a>
+          </li>
+      </ul>
+  </li>
+
+  {% endif %}
+</ul>
+          
+</div>
+</div>
+</nav>
+        
+           
+
+          
+<div id="toast-wrapper" class="position-fixed end-0 p-3" style="top: 72px; z-index: 1055;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="toast minimal-toast {{ category }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3500">
+          <div class="d-flex align-items-start">
+            <div class="toast-body">
+              {{ message }}
+            </div>
+            <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="toast"></button>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+{% block main %}
+
+{% endblock main %}
+
+
+<footer class="bg-dark  py-5">
+  <div class="container">
+    <div class="row">
+     
+      <div class="col-lg-4 col-md-6 mb-4 ">
+        <h5 class="text-uppercase fw-bold mb-3 text-light ">World Hotels</h5>
+        <p class="mb-3 text-light ">Experience luxury and comfort across 17 premium locations in the UK..</p>
+        <div class="d-flex">
+          <a href="#" class="text-light me-3 fs-5"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-light me-3 fs-5"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-light me-3 fs-5"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-light fs-5"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h6 class="text-uppercase fw-bold mb-3 text-light ">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="/home" class="text-light text-decoration-none">Home</a></li>
+          <li class="mb-2"><a href="{{url_for('public.about_us')}}" class="text-light text-decoration-none">About Us</a></li>
+          <li class="mb-2"><a href="/contactUs" class="text-light text-decoration-none">Contact</a></li>
+          <li class="mb-2"><a href="/search" class="text-light text-decoration-none">Search Hotels</a></li>
+        </ul>
+      </div>
+
+     
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h6 class="text-uppercase fw-bold mb-3 text-light ">Services</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Hotel Booking</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Advance Discounts</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Flexible Cancellation</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">24/7 Support</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-lg-4 col-md-6 mb-4 ">
+        <h6 class="text-uppercase fw-bold mb-3 text-light ">Contact Us</h6>
+        <p class="mb-2 text-light "><i class="fas fa-map-marker-alt me-2"></i>123 Hotel Street, London, UK</p>
+        <p class="mb-2 text-light "><i class="fas fa-phone me-2"></i>+44 20 1234 5678</p>
+        <p class="mb-2 text-light "><i class="fas fa-envelope me-2"></i>info@worldhotels.co.uk</p>
+        <p class="mb-0 text-light "><i class="fas fa-clock me-2"></i>Mon-Fri: 9AM-6PM</p>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <p class="mb-0 text-light">&copy; 2025 World Hotels. All rights reserved.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <a href="{{ url_for('public.FAQ') }}" class="text-light text-decoration-none me-3">FAQ</a>
+        <a href="{{ url_for('public.privacy_policy') }}" class="text-light text-decoration-none me-3">Privacy Policy</a>
+        <a href="{{url_for('public.term_of_services')}}" class="text-light text-decoration-none me-3">Terms of Service</a>
+        <a href="{{url_for('public.cookie_policy')}}" class="text-light text-decoration-none">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src="{{ url_for('static', filename='base.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // 1. INITIALIZE TIMERS
+    function updateAllTimers() {
+        // Current time in milliseconds
+        const now = new Date().getTime();
+        
+        // Find all cells that have an expiry timestamp
+        const timerCells = document.querySelectorAll('.timer-cell');
+
+        timerCells.forEach(cell => {
+            const expiryStr = cell.getAttribute('data-expiry');
+            
+            // Skip if no expiry data (confirmed/completed bookings)
+            if (!expiryStr || expiryStr.trim() === "") return;
+
+            // Convert ISO string to date object
+            const expiryDate = new Date(expiryStr).getTime();
+            const distance = expiryDate - now;
+            const textSpan = cell.querySelector('.countdown-text');
+            
+            if (!textSpan) return;
+
+            // IF EXPIRED
+            if (distance < 0) {
+                textSpan.innerHTML = '<i class="fas fa-hourglass-end me-1"></i> EXPIRED';
+                textSpan.classList.remove('text-danger');
+                textSpan.classList.add('text-muted');
+                
+                // Disable the Pay button in this row
+                const row = cell.closest('tr');
+                const payBtn = row.querySelector('.pay-btn');
+                
+                if (payBtn && !payBtn.classList.contains('disabled')) {
+                    payBtn.classList.add('disabled', 'btn-secondary');
+                    payBtn.classList.remove('btn-primary');
+                    payBtn.innerHTML = '<i class="fa-solid fa-lock me-1"></i> Session Expired';
+                    payBtn.setAttribute('href', 'javascript:void(0)');
+                    
+                    // Optional: Auto-refresh after 5 seconds of expiry to clean the UI
+                    setTimeout(() => { window.location.reload(); }, 5000);
+                }
+                return;
+            }
+
+            // CALCULATE TIME REMAINING
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Format with leading zeros
+            const displayMin = minutes < 10 ? "0" + minutes : minutes;
+            const displaySec = seconds < 10 ? "0" + seconds : seconds;
+            
+            textSpan.innerHTML = `<i class="fa-solid fa-clock-rotate-left me-1"></i> ${displayMin}:${displaySec}`;
+
+            
+            if (minutes < 2) {
+                textSpan.classList.add('timer-pulse');
+            }
+        });
+    }
+
+    
+    setInterval(updateAllTimers, 1000);
+    
+    updateAllTimers();
+
+});
+
+
+function openCancelModal(bookingId, currency) {
+    const modalElement = document.getElementById('cancelModal');
+    const daysEl = document.getElementById('cancel-days');
+    const feeEl = document.getElementById('cancel-fee');
+    const refundEl = document.getElementById('cancel-refund');
+    const feeCurrEl = document.getElementById('cancel-currency-fee');
+    const refundCurrEl = document.getElementById('cancel-currency-refund');
+    const cancelForm = document.getElementById('confirmCancelForm');
+
+  
+    daysEl.innerText = "Calculating...";
+    
+    fetch(`/get-cancellation-details/${bookingId}`)
+        .then(res => {
+            if (!res.ok) throw new Error("Network response was not ok");
+            return res.json();
+        })
+        .then(data => {
+            
+            let noticeText = data.days < 0 ? "Check-in date passed" : `${data.days} days before check-in`;
+            daysEl.innerText = noticeText;
+            
+          
+            feeEl.innerText = data.fee.toLocaleString(undefined, {minimumFractionDigits: 2});
+            refundEl.innerText = data.refund.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+           
+            feeCurrEl.innerText = currency;
+            refundCurrEl.innerText = currency;
+            
+            
+            cancelForm.action = `/cancel-booking/${bookingId}`;
+            
+           
+            const myModal = new bootstrap.Modal(modalElement);
+            myModal.show();
+        })
+        .catch(err => {
+            console.error("Cancellation Detail Error:", err);
+            alert("Could not retrieve cancellation policy. Please try again.");
+        });
+}
+
+</script>

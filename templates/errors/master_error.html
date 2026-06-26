@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='master_error.css')}}" />
+</head>
+<body>
+<div class="error-page-wrapper d-flex align-items-center justify-content-center">
+    <div class="container text-center">
+        <div class="luxury-icon-box mb-4">
+            <div class="icon-inner">
+                {% if code == 404 %}
+                    <i class="fas fa-map-marked-alt"></i>
+                {% elif code >= 500 %}
+                    <i class="fas fa-concierge-bell"></i>
+                {% else %}
+                    <i class="fas fa-key"></i>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="error-meta">
+            <span class="error-code-label">Error Code {{ code }}</span>
+            <h1 class="error-title">
+                {% if code == 404 %} Destination Not Found
+                {% elif code == 403 %} Access Restricted
+                {% else %} System Interruption {% endif %}
+            </h1>
+            <p class="error-message">{{ message }}</p>
+        </div>
+
+        <div class="error-actions">
+            <a href="{{ url_for('public.home') }}" class="btn btn-luxury-gold">
+                Return to Dashboard
+            </a>
+            <button onclick="history.back()" class="btn btn-luxury-outline">
+                Previous Page
+            </button>
+        </div>
+
+        <div class="error-footer">
+            <span class="footer-brand">WORLD HOTEL</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

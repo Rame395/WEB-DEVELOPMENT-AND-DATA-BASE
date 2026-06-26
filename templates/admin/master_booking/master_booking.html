@@ -1,0 +1,218 @@
+{% extends "admin/admin_base.html" %}
+
+{% block head %}Admin Booking Management{% endblock head %}
+
+{% block style %}
+<link rel="stylesheet" href="{{url_for('static',filename='master_booking.css')}}" />
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1"><i class="fas fa-tasks me-2 text-primary"></i>Live Booking Manager</h3>
+            <p class="text-muted mb-0">
+                System Overview: <span class="badge bg-primary">{{ my_booking|length }} Total Bookings</span>
+            </p>
+        </div>
+        <button class="btn btn-outline-primary btn-sm" onclick="location.reload()">
+            <i class="fas fa-sync-alt me-1"></i> Refresh Data
+        </button>
+    </div>
+
+    <ul class="nav nav-pills mb-4" id="bookingTabs">
+        <li class="nav-item">
+            <button class="nav-link active" data-filter="all">All</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link text-warning" data-filter="pending">
+                <i class="fas fa-exclamation-circle me-1"></i> Pending
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link text-success" data-filter="confirmed">
+                <i class="fas fa-check-double me-1"></i> Confirmed
+            </button>
+        </li>
+    </ul>
+
+        <div class="row mb-3 g-3">
+        <div class="col-md-8">
+        <div class="search-wrapper mb-4">
+            <div class="search-container bg-white shadow-sm">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" id="adminSearchInput" class="form-control search-input border-start-0" 
+                        placeholder="Search by Code, Room ID, or Status...">
+                    <button class="btn btn-link text-muted border-start-0" type="button" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group shadow-sm">
+                <button class="btn border" onclick="exportToExcel()">
+                    <i class="fas fa-file-export me-1 text-success"></i> Export
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body table-responsive-global p-0">
+            <table class="table table-striped table-bordered table-hover mb-0 w-100">
+                <thead class="table-light">
+                    <tr class="fw-bolder">
+                        <th>Code</th>
+                        <th>Room</th>
+                        <th>Guest Stay</th>
+                        <th class="text-center">No of Guests</th>
+                        <th>Revenue</th>
+                        <th>Status</th>
+                        <th>Expiry</th>
+                        <th class="text-end pe-3">Control Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 
+                    {% for booking in my_booking %}
+                    <tr class="booking-row" data-status="{{ booking.status }}">
+                        
+                        <td data-label="Booking Code" class=" fw-bold">{{ booking.booking_code }}</td>
+
+                        <td data-label="Room ID"><span class="badge bg-light text-dark border">#{{ booking.room_id }}</span></td>
+
+                        <td data-label="Guest Stay" class="small">
+                            <div><strong>In:</strong> {{ booking.check_in_date }}</div>
+                            <div class="text-muted"><strong>Out:</strong> {{ booking.check_out_date }}</div>
+                        </td>
+
+                        <td data-label="No of Guests">{{ booking.number_of_guests }}</td>
+                        <td data-label="Amount" class="fw-bold text-primary">{{ booking.currency }} {{ booking.total_price }}</td>
+                        
+                        <td data-label="Status">
+                            {% if booking.status == 'confirmed' %}
+                                <span class="text-success small fw-bold"><span class="status-dot bg-success"></span>Confirmed</span>
+                            {% elif booking.status == 'pending' %}
+                                <span class="text-warning small fw-bold"><span class="status-dot bg-warning"></span>Waiting Pay</span>
+                            {% else %}
+                                <span class="text-danger small fw-bold"><span class="status-dot bg-danger"></span>{{ booking.status | capitalize }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td data-label="Expiry" class="timer-cell" data-expiry="{{ booking.expires_at.isoformat() if booking.status == 'pending' else '' }}">
+                            {% if booking.status == 'pending' %}
+                                <span class="countdown-text text-danger timer-text">--:--</span>
+                            {% else %}
+                                <span class="text-muted small">--</span>
+                            {% endif %}
+                        </td>
+
+                        <td data-label="control Action">
+                            <div class="dropdown">
+                                <button class="btn btn-light btn-sm border" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li><a class="dropdown-item" href="{{ url_for('booking_details.booking_details', booking_code=booking.booking_code) }}"><i class="fas fa-eye me-2"></i> View Details</a></li>
+                                    {% if booking.status == 'confirmed' %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="openCancelModal('{{ booking.id }}')">
+                                            <i class="fas fa-times-circle me-2"></i> Force Cancel
+                                        </a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                    {% endfor %}
+                     <tr id="noResultsRow" style="display: none;">
+                        <td colspan="9" class="text-center py-5">
+                            <i class="fas fa-search-location fa-3x text-muted mb-3 opacity-25"></i>
+                            <h5 class="text-muted">No Booking Found</h5>
+                        </td>
+                    </tr>
+                  
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+let currentFilter = 'all';
+let currentSearch = '';
+
+function applyFilters() {
+    const rows = document.querySelectorAll('.booking-row');
+    
+    rows.forEach(row => {
+        const status = row.getAttribute('data-status');
+        const text = row.textContent.toLowerCase();
+        
+        const matchesFilter = (currentFilter === 'all' || status === currentFilter);
+        const matchesSearch = text.includes(currentSearch);
+        
+       
+        if (matchesFilter && matchesSearch) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+
+document.querySelectorAll('#bookingTabs .nav-link').forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('#bookingTabs .nav-link').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        currentFilter = this.getAttribute('data-filter');
+        applyFilters();
+    });
+});
+
+
+document.getElementById('adminSearchInput').addEventListener('keyup', function() {
+    currentSearch = this.value.toLowerCase();
+    applyFilters();
+    
+});
+
+
+function updateAllTimers() {
+    
+}
+setInterval(updateAllTimers, 1000);
+
+
+function exportToExcel() {
+    let csv = [];
+    const rows = document.querySelectorAll("table tr");
+    
+    for (const row of rows) {
+        if (row.style.display !== "none") { 
+            const data = Array.from(row.querySelectorAll("th, td"))
+                             .map(cell => `"${cell.innerText.replace(/\n/g, ' ')}"` )
+                             .join(",");
+            csv.push(data);
+        }
+    }
+    
+    const csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+    const downloadLink = document.createElement("a");
+    downloadLink.download = `Bookings_Report_${new Date().toLocaleDateString()}.csv`;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.click();
+}
+</script>
+{% endblock admin_content %}

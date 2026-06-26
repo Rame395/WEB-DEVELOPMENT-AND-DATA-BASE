@@ -1,0 +1,31 @@
+h3{
+    font-size: 1.1rem;
+}
+
+th,p,td,i{
+    font-size: 0.65rem;
+}
+
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  min-width: 600px; /* adjust if needed */
+    width: 100%;
+  border-collapse: collapse;
+}
+
+
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+} 
+
+
+
+

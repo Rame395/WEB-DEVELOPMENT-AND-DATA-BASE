@@ -1,0 +1,31 @@
+.nav-tabs .nav-link {
+    color: #666;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px; }
+
+.nav-tabs .nav-link.active { font-weight: bold; color: #0d6efd; border-bottom: 2px solid #0d6efd; background: none; }
+.timer-text { font-family: monospace; font-size: 0.85rem; }
+    
+    .search-wrapper {
+        max-width: 400px;
+        transition: all 0.3s ease;
+    }
+    .search-container {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #dee2e6;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .search-container:focus-within {
+        border-color: #D4AF37; 
+        box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.1);
+    }
+    .input-group-text {
+        border: none;
+    }
+    .search-input {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0.75rem 1rem;
+    }

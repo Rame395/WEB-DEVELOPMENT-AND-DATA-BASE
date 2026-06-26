@@ -1,0 +1,73 @@
+.error-page-wrapper {
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+    color: #fff;
+    display: flex;
+    padding: 20px;
+}
+
+.error-code-label {
+    color: #d4af37;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.error-title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    margin: 10px 0 20px;
+}
+
+.error-message {
+    color: #a0a0a0;
+    max-width: 500px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+}
+
+/* Luxury Buttons - Fixed the uneven widths from your screenshot */
+.error-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-luxury-gold {
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    color: #000;
+    border: none;
+    padding: 15px 35px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    min-width: 220px;
+}
+
+.btn-luxury-outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 15px 35px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    min-width: 220px;
+}
+
+.btn-luxury-gold:hover, .btn-luxury-outline:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.footer-brand {
+    margin-top: 60px;
+    display: block;
+    opacity: 0.3;
+    letter-spacing: 8px;
+    font-weight: 200;
+}

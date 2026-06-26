@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% from "macros.html" import csrf_input %}
+{% block head %}Payment{% endblock head %}
+
+{% block main %}
+<div class="container py-5 mt-5">
+    <div class="row g-4">
+        <div class="col-lg-4 order-lg-last">
+            <div class="card border-0 shadow-sm rounded-3 bg-light mb-4">
+                <div class="card-body p-4">
+                    <h5 class="mb-3">Booking Summary</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Room Charges</span>
+                        <span>{{ booking.currency }} {{ booking.base_price }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 text-danger">
+                        <span>Discount Applied</span>
+                        <span>-{{ booking.currency }} {{ booking.discount_amount }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-0">
+                        <span class="h5">Total to Pay</span>
+                        <span class="h5 text-primary">{{ booking.currency }} {{ booking.total_price }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-3 bg-light">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold  mb-3"><i class="fa fa-info-circle me-2"></i>Cancellation Policy</h6>
+                    <div class="small">
+                        <p class="fw-bold"><i class="fa fa-check-circle me-2 mb-1 text-success"></i>Full Refund: 61+ days</p>
+                        <p class="fw-bold"><i class="fa-solid fa-triangle-exclamation me-2 mb-1 text-warning"></i>50% Charge: 31-60 days</p>
+                        <p class="fw-bold"><i class="fa fa-times-circle me-2 mb-0 text-danger"></i>No Refund: 0-30 days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body p-4 p-md-5">
+                    
+                    <div id="paymentUI">
+                        <h4 class="mb-4">Secure Payment</h4>
+                        <div class="mb-4">
+                            <img src="https://img.icons8.com/color/48/000000/visa.png" width="40"/>
+                            <img src="https://img.icons8.com/color/48/000000/mastercard.png" width="40"/>
+                            <img src="https://img.icons8.com/color/48/000000/amex.png" width="40"/>
+                        </div>
+
+                        <form id="realPaymentForm" method="POST" action="{{ url_for('payment.payment_success', booking_code=booking_code) }}">
+                            {{ csrf_input() }}
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Name on Card</label>
+                                <input type="text" class="form-control form-control-lg" placeholder="John Doe">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Card Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fa-solid fa-credit-card text-muted"></i></span>
+                                    <input type="text" id="cardNumber" class="form-control form-control-lg" placeholder="0000 0000 0000 0000" maxlength="19">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Expiry Date</label>
+                                    <input type="text" class="form-control form-control-lg" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">CVV</label>
+                                    <input type="password" class="form-control form-control-lg" placeholder="***" maxlength="3">
+                                </div>
+                            </div>
+
+                             <a href="{{ url_for('payment.payment_success', booking_code=booking_code) }}"
+                              class="btn btn-success btn-lg w-100 mt-4 shadow-sm">Pay Now</a>
+                        </form>
+                    </div>
+
+                    <div id="processingOverlay" class="d-none text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                        <h4 class="fw-bold">Authorizing Transaction...</h4>
+                        <p class="text-muted">Verifying details with your bank. Please wait.</p>
+                        <div class="progress mt-4 mx-auto" style="width: 80%; height: 10px;">
+                            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+// Auto-format card number
+document.getElementById('cardNumber').addEventListener('input', function (e) {
+    e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+});
+
+// The Animation Logic
+document.getElementById('realPaymentForm').onsubmit = function(e) {
+    e.preventDefault(); // Stop the redirect so we can show the animation
+
+    const form = this;
+    const ui = document.getElementById('paymentUI');
+    const overlay = document.getElementById('processingOverlay');
+    const progressBar = document.getElementById('progressBar');
+
+    ui.classList.add('d-none');
+    overlay.classList.remove('d-none');
+
+    let width = 0;
+    let interval = setInterval(() => {
+        if (width >= 100) {
+            clearInterval(interval);
+            alert("Bank Verification Successful!");
+            form.submit(); 
+        } else {
+            width += 10;
+            progressBar.style.width = width + '%';
+        }
+    }, 250); 
+};
+</script>
+{% endblock main %}

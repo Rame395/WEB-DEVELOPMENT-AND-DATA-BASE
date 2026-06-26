@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Hotel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='admin_base.css')}}" />
+    <title>{% block head %}{% endblock head %}</title>
+    <script>
+      const savedTheme = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    </script>
+      {% block style %}
+      {% endblock style %}
+    
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container">
+        <button class="btn btn-outline-light" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+        </button>
+        <span class="navbar-brand mb-0 h6">Admin Dashboard</span>
+    </div>
+    </nav>
+
+    <div class="sidebar">
+        <div class="sidebar-header text-center">
+            
+            <span class="badge bg-primary mt-2 small">Admin Dashboard</span>
+        </div>
+
+        <div class="py-4">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'reports.report' }}" href="{{ url_for('reports.report') }}">
+                        <i class="fas fa-chart-line"></i> Statistics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'manage_user.manage_users' }}" href="{{ url_for('manage_user.manage_users') }}">
+                        <i class="fas fa-users-cog"></i> Manage Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'manage_hotel.manage_hotels' }}" href="{{ url_for('manage_hotel.manage_hotels') }}">
+                        <i class="fas fa-hotel"></i> Manage Hotels
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'manage_room.manage_rooms' }}" href="{{ url_for('manage_room.manage_rooms') }}">
+                        <i class="fas fa-door-open"></i> Manage Rooms
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'manage_currency.manage_currencies' }}" href="{{ url_for('manage_currency.manage_currencies') }}">
+                        <i class="fas fa-door-open"></i> Manage Currencies
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'booking_details.bookings' }}" href="{{url_for('booking_details.bookings')}}">
+                        <i class="fas fa-list-ul"></i> Master Bookings
+                    </a>
+                </li>
+                   <li class="nav-item">
+                   <a class="nav-link fw-bold" href="{{url_for('manage_gallery.gallery')}}" id="adminMenu" role="button" >
+                     <i class="fa-solid fa-photo-film me-1"></i> Manage Gallery
+                  </a>
+                 </li>
+                 
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle fw-bold" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fas fa-cog me-1"></i> Settings
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userMenu">
+                          <li><h6 class="dropdown-header">User Account</h6></li>
+                          <li><a class="dropdown-item" href="{{url_for('userProfile.userProfile')}}">
+                              <i class="fas fa-user-circle fa-fw me-2 text-muted"></i>Account Info
+                          </a></li>
+                          <li><a class="dropdown-item" href="{{url_for('booking.booking_history')}}">
+                              <i class="fas fa-history fa-fw me-2 text-muted"></i>Booking History
+                          </a></li>
+                          
+                          <li><hr class="dropdown-divider"></li>
+                          
+                          
+                          <li class="px-3 py-1">
+                              <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" id="themeToggle">
+                                  <label class="form-check-label small" for="themeToggle">Dark Mode</label>
+                              </div>
+                          </li>
+                          
+                          <li><hr class="dropdown-divider"></li>
+                          
+                          <li><a class="dropdown-item" href="/support">
+                              <i class="fas fa-question-circle fa-fw me-2 text-muted"></i>Support Center
+                          </a></li>
+                      </ul>
+                  </li>
+                
+                <hr class="mx-3 opacity-25 mt-4">
+                
+                <li class="nav-item">
+                    <a class="nav-link text-warning" href="{{ url_for('public.home') }}">
+                        <i class="fas fa-arrow-left"></i> Back to Website
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+<div id="toast-wrapper" class="position-fixed end-0 p-3" style="top: 72px; z-index: 1055;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="toast minimal-toast {{ category }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3500">
+          <div class="d-flex align-items-start">
+            <div class="toast-body">
+              {{ message }}
+            </div>
+            <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="toast"></button>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+<div id="toast-wrapper" class="position-fixed end-0 p-3" style="top: 72px; z-index: 1055;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="toast minimal-toast {{ category }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3500">
+          <div class="d-flex align-items-start">
+            <div class="toast-body">
+              {{ message }}
+            </div>
+            <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="toast"></button>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+<div class="main-content">
+    
+    {% block admin_content %}
+    
+    {% endblock %}
+</div>
+
+<script>
+  document.getElementById("sidebarToggle").addEventListener("click", function () {
+    document.querySelector(".sidebar").classList.toggle("show");
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('.toast').forEach(toastEl => {
+    const t = new bootstrap.Toast(toastEl, { delay: 3500 });
+    t.show();
+  });
+});
+
+const toggleBtn = document.getElementById("themeToggle");
+
+if (localStorage.getItem("theme") === "dark") {
+  toggleBtn.textContent = "☀️ Light Mode";
+}
+
+toggleBtn.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+
+  if (current === "dark") {
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem("theme", "light");
+    toggleBtn.textContent = "🌙 Dark Mode";
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+    toggleBtn.textContent = "☀️ Light Mode";
+  }
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+    
+
+    
+    
+    
+
+

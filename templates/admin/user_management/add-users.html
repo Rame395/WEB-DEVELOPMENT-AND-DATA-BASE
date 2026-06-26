@@ -1,0 +1,67 @@
+{% extends "admin/admin_base.html" %}
+{% from "macros.html" import csrf_input %}
+
+{% block head %}Add Users{% endblock head %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='manage_user.css')}}" />
+{% endblock %}
+
+
+{% block admin_content %}
+<div class='container-fluid'>
+    <div class='card shadow-sm border-0'>
+    <h6 class='py-5 ms-4'><i class="fa-solid fa-user-plus me-2 fs-6"></i>Add Users</h6>
+
+    <div class='card-body '>
+   
+    
+    <form  method="POST" class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Role</label>
+            <select class="form-select" name="role" required>
+                <option disabled selected>Select role</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+            </select>
+        </div>
+        {{ csrf_input() }}
+        <div class="col-12 d-flex justify-content-end gap-2">
+              <a href="{{ url_for('manage_user.manage_users') }}"
+                 class="btn btn-outline-secondary">
+                Cancel
+              </a>
+              
+              <button class="btn btn-primary">
+                <i class="fa fa-save me-1"></i>Add User
+              </button>
+        </div>
+</form>
+</div>
+</div>
+</div>
+
+{% endblock admin_content %}
+
+  
+   
+
+ 
+
+

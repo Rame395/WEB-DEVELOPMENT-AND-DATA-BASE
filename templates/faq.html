@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block head %}Home{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='faq.css')}}" />
+{% endblock %}
+
+{% block main %}
+
+<section class="faq-section mt-5 py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-primary text-uppercase fw-bold ls-2">Got Questions?</h6>
+            <h2 class="fw-bold">Frequently Asked Questions</h2>
+            <p class="text-muted">Everything you need to know about your stay in the UK.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="hotelFAQ">
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How do I modify or cancel my booking?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#hotelFAQ">
+                            <div class="accordion-body text-muted">
+                                You can manage your reservations directly through the <strong>My Bookings</strong> section in your dashboard. Please note that cancellation policies vary by hotel and room type; always check the specific terms during checkout.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Are the prices shown inclusive of VAT?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#hotelFAQ">
+                            <div class="accordion-body text-muted">
+                                Yes, all prices listed on World Hotel for UK properties include the standard UK Value Added Tax (VAT). There are no hidden booking fees at the final stage.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                What documents do I need for check-in?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#hotelFAQ">
+                            <div class="accordion-body text-muted">
+                                You will need a valid government-issued photo ID (Passport or Driving License) and the credit/debit card used for the booking. For international travelers, a passport is mandatory.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Do you offer airport transfers?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#hotelFAQ">
+                            <div class="accordion-body text-muted">
+                                Many of our partner hotels in London, Manchester, and Edinburgh offer shuttle services. You can view these details under the "Amenities" section of the hotel page or contact the concierge through our platform.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock%}

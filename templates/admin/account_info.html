@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}Account Info{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='my_profile.css')}}">
+{% endblock %}
+
+{% block main %}
+
+<div class='container c-container'>
+    <h3>My Account</h3>
+    <p>Welcome, {{session.username}}</p>
+  
+     {% if profile and profile.profile_picture %}
+       <img src="{{ url_for('static', filename=profile.profile_picture) }}"
+       width="80" height="80"
+        style="border-radius:50%;">
+    {% else %}
+       <img src="{{ url_for('static', filename='images/default_profile.avif') }}"
+        width="80" height="80"
+        style="border-radius:50%;">
+    {% endif %}
+
+      <div class="col-12 mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">Update Profile</button>
+            <a href="{{ url_for('public.home') }}" class="btn btn-light px-4">Cancel</a>
+    </div>
+</div>
+{% endblock main %}

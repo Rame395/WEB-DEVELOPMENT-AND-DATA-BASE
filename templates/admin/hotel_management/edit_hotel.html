@@ -1,0 +1,94 @@
+{% extends "admin/admin_base.html" %}
+{% from "macros.html" import csrf_input %}
+
+{% block head %}Add Hotel{% endblock head %}
+
+{% block style %}
+<link rel="stylesheet" href="{{url_for('static',filename='manage_hotel.css')}}" />
+{% endblock %}
+
+
+{% block admin_content %}
+<div class='container'>
+    
+    <div class='card shadow-sm border-0'>
+    <h6 class='py-5 ms-4'><i class="fa-solid fa-user-plus me-2 fs-6"></i>Add Hotel</h6>
+
+    <div class='card-body '>
+  
+    <form  method="POST" class="row g-3" enctype="multipart/form-data">
+        <div class="col-md-6">
+            <label class="form-label">Hotel Name</label>
+            <input type="text" class="form-control" name="name" value="{{hotel.name}}" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" name="address" value="{{hotel.address}}" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-control" name="description" value="{{hotel.description}}" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Peak Season Price</label>
+            <input type="number" class="form-control" name="peak_rate" value="{{hotel.base_price_peak}}" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Off-peak Season</label>
+            <input type="number" class="form-control" name="offpeak_rate"value="{{hotel.base_price_offpeak}}" required>
+        </div>
+
+        
+        <div class="col-md-6">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status" required>
+                <option disabled selected>Select role</option>
+                <option value="1" >Active</option>
+                <option value="0">Inactive</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">Current Image</label>
+            <div class="mb-2">
+                {% if hotel.image_url %}
+                    <img src="{{ url_for('static', filename=hotel.image_url) }}" 
+                        alt="Hotel Image" 
+                        style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                {% else %}
+                    <p class="text-muted small">No image uploaded</p>
+                {% endif %}
+             </div>
+            <label class="form-label fw-semibold">Upload New Image (Optional)</label>
+            <input type="file" class="form-control" name="hotel_image" accept="image/*">
+            <div class="form-text">Leave blank to keep the current image.</div>
+            </div>
+           
+
+            <div class="col-12 d-flex justify-content-end gap-2">
+                  <a href="{{ url_for('manage_hotel.manage_hotels') }}"
+                     class="btn btn-outline-secondary">
+                    Cancel
+                  </a>
+                  {{ csrf_input() }}
+                  <button class="btn btn-primary">
+                    <i class="fa fa-save me-1"></i>Edit 
+                  </button>
+            </div>
+    </form>
+    </div>
+    </div>
+    </div>
+                
+            
+
+
+        
+
+       
+
+{% endblock admin_content %}

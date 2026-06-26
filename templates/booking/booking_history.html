@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block head %}Booking History{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='my_booking.css')}}" />
+<style>
+    .nav-tabs .nav-link { color: #666; cursor: pointer; border: none; border-bottom: 2px solid transparent; }
+    .nav-tabs .nav-link.active { font-weight: bold; color: #0d6efd; border-bottom: 2px solid #0d6efd; background: none; }
+    .table-hover tbody tr:hover { background-color: #f8f9fa; }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="container py-5 my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1"><i class="fas fa-history me-2"></i>Booking History</h3>
+            <p class="text-muted mb-0">
+                Total Records: <span class="fw-semibold">{{ history_bookings|length }}</span>
+            </p>
+        </div>
+        <a href="{{ url_for('booking.my_booking') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> Back to Active Bookings
+        </a>
+    </div>
+
+    <ul class="nav nav-tabs mb-4" id="bookingTabs">
+        <li class="nav-item">
+            <button class="nav-link active" data-filter="all">All History</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-filter="completed">Completed</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-filter="cancelled">Cancelled</button>
+        </li>
+    </ul>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body table-responsive-global">
+            <table class="table table-striped table-bordered table-hover mb-0 w-100">
+                <thead class="table-light">
+                    <tr>
+                        <th>Booking Code</th>
+                        <th>Room</th>
+                        <th>Check-IN</th>
+                        <th>Check-OUT</th>
+                        <th>Guests</th>
+                        <th>Nights</th>
+                        <th>Total Paid</th>
+                        <th>Status</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in history_bookings %}
+                    <tr class="booking-row" data-status="{{ booking.status }}">
+                        <td data-label="Booking Code"class="fw-semibold text-primary">{{ booking.booking_code }}</td>
+                        <td data-label="Room ID"><span class="badge bg-light text-dark">ID: {{ booking.room_id }}</span></td>
+                        <td  data-label="Check-In" class="text-muted small">{{ booking.check_in_date }}</td>
+                        <td  data-label="Check-Out" class="text-muted small">{{ booking.check_out_date }}</td>
+                        <td  data-label="Guests" >{{ booking.number_of_guests }}</td>
+                        <td  data-label="Total Nights" >{{ booking.total_nights }}</td>
+                        <td  data-label="Currency" class="fw-bold">{{ booking.currency }}{{ booking.total_price }}</td>
+
+                        <td  data-label="Status">
+                            {% if booking.status == 'completed' %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3">
+                                    <i class="fa-solid fa-check-circle me-1"></i> Completed
+                                </span>
+                            {% elif booking.status == 'cancelled' %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3">
+                                    <i class="fa-solid fa-ban me-1"></i> Cancelled
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3">
+                                    {{ booking.status | capitalize }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td data-label="Booking Date" class="text-muted small">
+                            {{ booking.booking_date.strftime('%d %b %Y') if booking.booking_date else 'N/A' }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-5 text-muted">
+                            <i class="fas fa-folder-open fa-3x mb-3 d-block"></i>
+                            No booking history found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('#bookingTabs .nav-link').forEach(tab => {
+        tab.addEventListener('click', function() {
+           
+            document.querySelectorAll('#bookingTabs .nav-link').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+            const rows = document.querySelectorAll('.booking-row');
+            
+            rows.forEach(row => {
+                const status = row.getAttribute('data-status');
+                if (filter === 'all' || status === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock main %}

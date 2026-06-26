@@ -1,0 +1,274 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.c-item{
+    height: auto;
+   
+}
+.c-item img{
+   height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    
+}
+
+
+.c-sliderContent{
+    position: absolute; 
+    top: 0;
+    left: 0;
+    z-index: 1; 
+    color: white;
+    background-color: rgba(46, 46, 46, 0.5); 
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    
+    
+}
+   
+   
+.content{
+    position: absolute;
+    top:40%;
+    left: 27%;
+    text-align: center;
+
+}
+    
+.c-sliderContent h1{
+    font-size: 3rem;
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+}
+.c-sliderContent p{
+    color: rgb(255, 255, 255);
+}
+
+
+    
+    
+
+.c-card p{
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+}
+
+.icon{
+    height: 45px;
+    width: 45px;
+    background-color: #D1FAE5;
+    margin-bottom: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+
+}
+.icon i{
+    font-size: 1.4rem;
+    color:rgb(111, 207, 111);
+}
+
+
+.c-card{
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+    
+
+.c-card:hover{
+    overflow: hidden;
+    transform: scale(1.02);
+    /* box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15); */
+}
+
+
+.c-hotelcard{
+  overflow: hidden;         
+  
+  
+  
+  
+}
+.c-hotelcard p{
+    font-size: 0.75rem;
+}
+
+   
+
+
+.img-wrapper {
+  overflow: hidden;  
+}
+ 
+.img-wrapper img{
+    height: 200px;
+    border-radius: 5px 5px 0px 0px;
+    transition: transform 0.4s ease;
+}
+  
+
+.img-wrapper img {
+  transition: transform 0.4s ease;
+}
+
+.c-hotelcard:hover .img-wrapper img {
+  transform: scale(1.1);
+}
+
+.img-wrapper {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+
+.bottom-left {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  background-color: hsla(0, 4%, 5%, 0.5)
+}
+
+
+
+.c-roomcard{
+    border-radius: 6px;  
+    overflow: hidden;   
+}
+  
+
+.c-roomcard:hover{
+    overflow-x: hidden;
+    transform: scale(1.02);
+    
+}
+       
+.c-roomimage{
+    border-radius:5px 5px 0 0;
+    height: 220px;
+}
+
+.c-roomimage{
+    border-radius:0;
+    border-width: 2px;
+    border-color: #059669;
+}
+
+.c-roomcard p{
+    font-size: 0.7rem;
+}
+.c-roomcard ul{
+    font-size: 0.7rem;
+}
+
+.popular{
+    background-color: #059669;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0;
+    border-radius: 5px 5px 0 0;
+}
+.search{
+    
+    background-color: #059669;
+    color: white;
+    margin-bottom: 0;
+}
+
+
+.c-navbar.scrolled {
+   
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.c-navbar.scrolled .nav-link {
+    color: #f8f5f5; 
+    
+}
+
+.c-navbar .nav-link {
+    color: #f8f5f5; 
+    transition: color 0.3s ease-in-out; 
+}
+
+.c-navbar.scrolled .nav-link {
+    color:black; 
+}
+[data-theme="dark"]{
+.c-navbar.scrolled .nav-link {
+    color: #f8f5f5; 
+}
+}
+
+
+@media (max-width: 768px) {
+   
+    .c-item {
+        height: 60vh !important; 
+        min-height: 450px;
+    }
+
+   
+    .c-item img {
+        height: 60vh !important;
+        min-height: 450px;
+        object-fit: cover;
+    }
+
+   
+    .c-sliderContent {
+        display: flex !important;
+        align-items: center; 
+        justify-content: center; 
+        padding: 0 !important;
+    }
+
+
+    .content {
+        position: relative !important; 
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        padding: 20px !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+    }
+
+  
+    .c-sliderContent h1 {
+        font-size: 1.8rem !important;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+
+    .c-sliderContent p {
+        font-size: 0.95rem !important;
+        padding: 0 10px;
+        br { display: none; } 
+    }
+
+    
+    .carousel-control-prev, .carousel-control-next {
+        width: 10%;
+    }
+}
+        
+
+
+
+
+  
+
+   
+
+
+    
+    
+    
+    
+    
+

@@ -1,0 +1,48 @@
+{% extends "admin/admin_base.html" %}
+{% from "macros.html" import csrf_input %}
+
+{% block head %}Edit Rooms{% endblock head %}
+
+
+
+
+{% block admin_content %}
+<div class='container py-5 my-5'>
+    
+    <div class='card shadow-sm border-0'>
+    <h6 class='py-5 ms-4'><i class="fa-solid fa-user-plus me-2 fs-6"></i>Edit Rooms</h6>
+
+    <div class='card-body '>
+    <form  method="POST" class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status" required>
+                <option value="available" {%if room.status=='available'%}selected{% endif %}>Available</option>
+                <option value="booked" {%if room.status=='booked'%}selected{% endif %}>Booked</option>
+                <option value="maintenance" {%if room.status=='maintenance'%}selected{% endif %}>Maintenance</option>
+            </select>
+        </div>
+                
+       
+        <div class="col-12 d-flex justify-content-end gap-2">
+              <a href="{{ url_for('manage_room.manage_rooms') }}"
+                 class="btn btn-outline-secondary">
+                Cancel
+              </a>
+              {{ csrf_input() }}
+              <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save me-1"></i>Edit 
+              </button>
+        </div>
+</form>
+</div>
+</div>
+</div>
+
+{% endblock admin_content %}
+        
+        
+
+
+        
+

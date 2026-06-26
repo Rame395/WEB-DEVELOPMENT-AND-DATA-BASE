@@ -1,0 +1,70 @@
+{% extends "admin/admin_base.html" %}
+{% from "macros.html" import csrf_input %}
+
+{% block head %}Add Currency{% endblock head %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='manage_currencies.css') }}" />
+{% endblock %}
+
+{% block admin_content %}
+
+<div class='container py-5 my-5'>
+    
+  <div class='card shadow-sm border-0'>
+    <h6 class='py-5 ms-4'>
+      <i class="fa-solid fa-coins me-2 fs-6"></i>Add Currency
+    </h6>
+
+    <div class='card-body'>
+  
+      <form method="POST" class="row g-3">
+
+        <div class="col-md-4">
+          <label class="form-label">Currency Code</label>
+          <input type="text" class="form-control" name="code" placeholder="e.g. USD" required>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Currency Name</label>
+          <input type="text" class="form-control" name="name" placeholder="e.g. United States Dollar" required>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Symbol</label>
+          <input type="text" class="form-control" name="symbol" placeholder="e.g. $" required>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Exchange Rate to GBP</label>
+          <input type="number" step="0.0001" class="form-control" name="exchange_rate_to_gbp" required>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Status</label>
+          <select class="form-select" name="is_active" required>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+
+        {{ csrf_input() }}
+
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <a href="{{ url_for('manage_currency.manage_currencies') }}"
+             class="btn btn-outline-secondary">
+            Cancel
+          </a>
+              
+          <button class="btn btn-primary">
+            <i class="fa fa-save me-1"></i>Add Currency
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock admin_content %}

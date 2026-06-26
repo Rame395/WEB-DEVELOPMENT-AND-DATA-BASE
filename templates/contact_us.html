@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+    
+{% from "macros.html" import csrf_input %} 
+{% block head %}Contact Us{% endblock head %}
+
+{% block main %}
+<div class="container py-5">
+    <div class="row mt-5">
+        <div class="col-xxl-7 col-xl-7 col-x-7 col-md-7 col-sm-12">
+            <div class="card">
+                <div class="card-body py-5">
+                    <h5 class="card-title py-3">Get in Touch</h5>
+                    <form class="row g-3" method="POST">
+                        <div class="col-md-6 mb-2">
+                           <label class="form-label">First Name</label>
+                           <input type="text" class="form-control" name="firstName" placeholder="Ramesh" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                           <label class="form-label">Last Name</label>
+                           <input type="text" class="form-control" name="lastName" placeholder="Shahi" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                           <label class="form-label">Email</label>
+                           <input type="email" class="form-control" name="email" placeholder="rameshshahi@gmail.com" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                           <label class="form-label">Phone</label>
+                           <input type="phone" class="form-control" name="phone" placeholder="+977 9848795482" required>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" required></textarea>
+                        </div>
+                        {{ csrf_input() }}
+                        <button class="btn btn-success d-flex align-items-center justify-content-center" type="submit" id="submitBtn" onclick="showLoading()">
+                            <span id="btnText" class="text-light text-center">Send Message</span>
+                            <div id="loadingSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
+                       
+                    </form>
+                </div>
+            </div>
+        </div>
+         <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-12">
+            <div class="card">
+                <div class="card-body py-5">
+                  <h5 class="mb-3">Contact Info</h5>
+                  <p><i class="fa-solid fa-location-crosshairs me-2"></i>Budhanilkantha Hattigauda, Kathmandu Nepal</p>
+                  <p><i class="fa-solid fa-envelope me-2"></i>worldhotel123@gmail.com</p>
+                  <p><i class="fa-solid fa-phone me-2"></i>+977 9848795482</p>
+                   <div class="d-flex">
+                        <a href="#" class=" me-3 fs-5"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="me-3 fs-5"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-3 fs-5"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="fs-5"><i class="fab fa-linkedin"></i></a>
+                  </div>
+                  
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3530.7863164891914!2d85.34514427534074!3d27.754736123399955!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2snp!4v1767272738591!5m2!1sen!2snp"  style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+<script>
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const targetUrl = form.getAttribute('data-url') || window.location.href;
+
+    
+    const email = formData.get("email");
+    if (!email.includes("@")) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    try {
+        const response = await fetch(targetUrl, {  
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+               
+                "X-CSRFToken": formData.get("csrf_token") 
+            }
+        });
+
+     
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new TypeError("Server did not return JSON!");
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Message sent successfully!");
+            form.reset();
+        } else {
+            alert("Error: " + (result.message || result.error));
+        }
+
+    } catch (error) {
+        console.error("DEBUG INFO:", error); 
+        alert("Something went wrong. Check the console (F12) for details.");
+    }
+});
+
+function showLoading() {
+    const btn = document.getElementById("submitBtn");
+    const spinner = document.getElementById("loadingSpinner");
+    const btnText = document.getElementById("btnText");
+
+   
+    if (btn.form.checkValidity()) {
+        btnText.innerText = "Sending...";
+        btn.classList.add("disabled"); 
+        spinner.classList.remove("d-none"); 
+    }
+}
+</script>
+
+
+{% endblock main %}
+                   
+                        
+
+  
+        

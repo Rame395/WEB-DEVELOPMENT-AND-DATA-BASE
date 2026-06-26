@@ -1,0 +1,23 @@
+    
+    .search-wrapper {
+        max-width: 400px;
+        transition: all 0.3s ease;
+    }
+    .search-container {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #dee2e6;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .search-container:focus-within {
+        border-color: #D4AF37; 
+        box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.1);
+    }
+    .input-group-text {
+        border: none;
+    }
+    .search-input {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0.75rem 1rem;
+    }

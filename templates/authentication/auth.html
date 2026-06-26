@@ -1,0 +1,136 @@
+
+
+{% extends "base.html" %}
+{% from "macros.html" import csrf_input %}
+
+{% block head %}
+Auth
+{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='auth.css')}}" />
+{% endblock %}
+
+
+{% block main %}
+
+<div class="outer-container">
+  <div class="container1">
+
+   
+    <div class="form-box login">
+      <form method="post" action="{{ url_for('auth.login') }}">
+        <h1>Login</h1>
+
+        <div class="input-box">
+          <input type="text" placeholder="Username" value="{{ username }}" name="username1" required>
+          <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Password" name="password1" required class="password-field">
+          <i class="fa-solid fa-eye toggle-password"></i>
+          
+        </div>
+
+        
+        <input type="hidden" name="device_info" id="device_info">
+        <input type="hidden" name="user_lat" id="user_lat">
+        <input type="hidden" name="user_lon" id="user_lon">
+
+        <div class="forget-link">
+          <a href="{{ url_for('auth.forget_Password') }}">Forgot Password?</a>
+        </div>
+
+        {{ csrf_input() }}
+
+        <button type="submit" class="btn1">Login</button>
+
+       <div class="form-check d-flex align-items-center justify-content-center">
+        <input class="form-check-input mt-0" type="checkbox" name="remember" id="rememberMe" value="1">
+        <label class="text-dark ms-1" for="rememberMe" style="cursor: pointer;">
+          Remember Me
+        </label>
+      </div>
+
+        
+      </form>
+    </div>
+
+    
+    <div class="form-box register">
+      <form method="post" id="demo-form" action="{{ url_for('auth.signup') }}">
+        <h1>Register</h1>
+
+        <div class="input-box">
+          <input type="text" placeholder="Username" name="username2" required>
+          <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="input-box">
+          <input type="email" placeholder="Email" name="email2" required>
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Password" name="password2" required class="password-field">
+          <i class="fa-solid fa-eye toggle-password"></i>
+     
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Confirm Password" name="confirmPassword" required class="password-field">
+          <i class="fa-solid fa-eye toggle-password"></i>
+        </div>
+         
+
+        
+        {{ csrf_input() }}
+        <button type="submit" class="btn1">Register</button>
+
+        <div class="password-strength mt-1">
+          <small id="pwdHint" class="text-muted">At least 8 characters, letters & numbers</small>
+          <div class="progress mt-1" style="height: 5px;">
+            <div id="pwdBar" class="progress-bar" style="width: 0%"></div>
+          </div>
+      </div>
+      </form>
+    </div>
+
+  
+    <div class="toggle-box">
+      <div class="toggle-panel toggle-left">
+        <h1>Hello, Welcome</h1>
+        <p>Don't have an account?</p>
+        <button class="btn1 register-btn">Register</button>
+      </div>
+
+     
+
+      <div class="toggle-panel toggle-right">
+        <h1>Welcome back</h1>
+        <p>Already have an account?</p>
+        <button class="btn1 login-btn">Login</button>
+      </div>
+    </div>
+
+    
+
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='auth.js') }}"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
+ <script>
+   function onSubmit(token) {
+     document.getElementById("demo-form").submit();
+   }
+ </script>
+
+ {% endblock main %}
+
+
+
+
+    
+

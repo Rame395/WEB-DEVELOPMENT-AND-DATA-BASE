@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block head %}Home{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='home.css')}}" />
+{% endblock %}
+
+{% block main %}
+
+
+<div id="carouselExampleCaptions" class="carousel slide">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  
+  <div class="carousel-inner c-item">
+    <div class="carousel-item active">
+      <img src="{{url_for('static', filename="images/slider-image1.jpg")}}" class="d-block w-100  c-image" alt="sliderimage1">
+
+      <div class="carousel-caption d-none d-md-block c-sliderContent">
+        <div class='content'>
+        <h1>Experience Luxury <br> Across the UK</h1>
+        <p>Book premium hotels in 17 stunning UK cities with exclusive advance booking <br> discounts up to 30%</p>
+      </div>
+      </div>
+    </div>
+      
+    <div class="carousel-item c-item">
+            <img src="{{ url_for('static', filename='gallery/1_about_us.jpg') }}" class="d-block w-100 c-image" alt="sliderimage2">
+            <div class="carousel-caption d-none d-md-block c-sliderContent">
+                <div class='content'>
+                    <h1>17 Premium <br> UK Locations</h1>
+                    <p>From London to Edinburgh, discover our carefully selected hotels <br> across the UK's most iconic cities and destinations.</p>
+                </div>
+          </div>
+    </div>
+
+    <div class="carousel-item c-item">
+        <img src="{{ url_for('static', filename='images/slider.avif') }}" class="d-block w-100 c-image" alt="sliderimage3">
+        <div class="carousel-caption d-none d-md-block c-sliderContent">
+            <div class='content'>
+                <h1>Flexible Planning <br> & Peace of Mind</h1>
+                <p>Enjoy flexible cancellation up to 60 days before your booking. <br> We understand that travel plans can change unexpectedly.</p>
+            </div>
+        </div>
+    </div>
+</div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+<section class="container py-5">
+    <h3 class="text-center  fs-4 fs-md-3 fs-lg-2">Why Choose World Hotels</h3>
+    <p class="text-center py-2 mb-5">Experience unparalleled service and comfort at every destination</p>
+    <div class="row">
+
+    <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-card">
+      <div class="card h-100">
+        <div class="card-body">
+         <div class="icon">
+            <i class="fa-solid fa-percent"></i>
+         </div>
+         
+          <h6>Advance Booking Discounts</h6>
+          <p class="card-text">Save up to 30% when you book 80-90 days in advance. The earlier you book, the more you save on your luxury stay.</p>
+        </div>
+      </div>
+    </div>
+          
+         
+    <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-card">
+      <div class="card h-100">
+        <div class="card-body">
+          
+           <div class="icon">
+            <i class="fa-solid fa-location-dot"></i>
+         </div>
+          <h6>17 Premium Locations</h6>
+          
+          <p class="card-text">From London to Edinburgh, discover our carefully selected hotels across the UK's most iconic cities and destinations.</p>
+        </div>
+    </div>
+</div>
+          
+    <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-card">
+      <div class="card h-100">
+        <div class="card-body">
+        
+           <div class="icon">
+            <i class="fa-solid fa-shield"></i>
+         </div>
+          <h6>Flexible Cancellation</h6>
+          
+          <p class="card-text">Cancel free of charge up to 60 days before your booking. We understand plans can change unexpectedly.</p>
+        </div>
+    </div>
+</div>
+          
+   
+    <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-card">
+      <div class="card h-100">
+        <div class="card-body">
+          
+           <div class="icon">
+            <i class="fa-regular fa-star"></i>
+         </div>
+          <h6>Luxury Amenities</h6>
+          <p class="card-text">Every room features free WiFi, smart TV, mini bar, and breakfast. Premium comfort is our standard offering.</p>
+        </div>
+      </div>
+    </div>
+          
+       
+    <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-card">
+      <div class="card h-100">
+        <div class="card-body">
+          
+           <div class="icon">
+            <i class="fa-regular fa-house"></i>
+         </div>
+          <h6>Room Options</h6>
+          <p class="card-text">Choose from Standard, Double, or Family rooms to perfectly match your travel needs and group size requirements.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-card">
+      <div class="card h-100">
+        <div class="card-body">
+          
+           <div class="icon">
+           <i class="fa-solid fa-headphones"></i>
+         </div>
+          <h6>24/7 Support</h6>
+          <p class="card-text">Our dedicated team is available around the clock to assist with bookings, changes, and any special requests you may have.</p>
+        </div>
+      </div>
+    </div>
+</div>
+</section>
+
+
+<section>
+  <div class="container py-5">
+    <h3 class="text-center text-bold fs-4 fs-md-3 fs-lg-2">Featured Destinations</h3>
+    <p class="text-center py-2 mb-5">Explore our most popular hotel locations across the United Kingdom</p>
+      <div class="row ">
+
+       <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-hotelcard">
+       <div class="card" >
+        <div class="img-wrapper">
+        <img src="{{ url_for('static', filename='images/hotel-image1.webp') }}" class="d-block w-100  c-hotelimage" alt="sliderimage1">
+        <h6 class="bottom-left my-4">Aberdeen</h6>
+        
+      </div>
+      <div class="card-body">
+          <p class="card-text">Experience luxury in the heart of Aberdeen with stunning views.</p>
+          
+        </div>
+      </div>
+    </div>
+
+            
+
+       <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-hotelcard">
+       <div class="card" >
+        <div class="img-wrapper">
+            <img src="{{ url_for('static', filename='images/hotel-image2.webp') }}" class="d-block w-100  c-hotelimage" alt="sliderimage1">
+            <h6 class="bottom-left my-4">Belfast</h6>
+        </div>
+           
+
+        <div class="card-body">
+            <p class="card-text">Discover Belfast's charm from our centrally located luxury hotel.</p>
+            
+        </div>
+      </div>
+    </div>
+            
+
+       <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-hotelcard">
+       <div class="card" >
+        <div class="img-wrapper">
+           <img src="{{ url_for('static', filename='images/hotel-image3.webp') }}" class="d-block w-100  c-hotelimage" alt="sliderimage1">
+           <h6 class="bottom-left my-4">Birmingham</h6>
+          </div>
+          
+        <div class="card-body">
+            <p class="card-text">Modern elegance meets traditional hospitality in Birmingham's finest hotel.</p>
+           
+        </div>
+      </div>
+    </div>
+            
+
+        <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-hotelcard">
+        <div class="card" >
+        <div class="img-wrapper">
+          <img src="{{ url_for('static', filename='images/hotel-image5.jpg') }}" class="d-block w-100  c-hotelimage" alt="sliderimage1">
+          <h6 class="bottom-left my-4">Bristol</h6>
+        </div>
+         
+       
+        <div class="card-body">
+            <p class="card-text">Stay in style at Bristol's premier waterfront hotel destination.</p>
+            
+            </div>
+        </div>
+        </div>
+            
+        <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-hotelcard">
+        <div class="card" >
+        <div class="img-wrapper">
+            <img src="{{ url_for('static', filename='images/hotel-image6.jpg') }}" class="d-block w-100  c-hotelimage" alt="sliderimage1">
+            <h6 class="bottom-left my-4">Cardiff</h6>
+          </div>
+          
+        <div class="card-body">
+            <p class="card-text">Experience Welsh hospitality at its finest in the heart of Cardiff.</p>
+            
+        </div>
+        </div>
+        </div>
+            
+       <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-hotelcard">
+       <div class="card" >
+        <div class="img-wrapper">
+            <img src="{{ url_for('static', filename='images/hotel-image4.webp') }}" class="d-block w-100  c-hotelimage" alt="sliderimage1">
+            <h6 class="bottom-left my-4">Edinburgh</h6>
+        </div>
+          
+        <div class="card-body">
+            <p class="card-text">Immerse yourself in Edinburgh's rich history at our iconic hotel.</p>
+            
+        </div>
+      </div>
+    </div>
+<div class="d-flex justify-content-center mt-3">
+    <a class="btn btn-outline-success btn-sm fw-bold px-4" 
+       href="{{ url_for('search.search') }}" 
+       style="width: fit-content;">
+       View All Destinations
+    </a>
+</div>
+
+
+
+</section>
+<section>
+<div class="container py-5">
+<h3 class="text-center  fs-4 fs-md-3 fs-lg-2 ">Choose Your Perfect Room</h3>
+<p class="text-center py-2 mb-5">We offer three distinct room types to suit every traveler's needs</p>
+<div class="row">
+<div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-roomcard">
+<div class="card">
+    
+  <img src="{{ url_for('static', filename='images/standard_room.webp') }}" class="d-block w-100  c-roomimage" alt="sliderimage1">
+  
+  <div class="card-body">
+    <h5 class="text-center py-2">Standard Room</h5>
+    <p class="card-text">Perfect for solo travelers seeking comfort and convenience.</p>
+    <ul>
+        <li>1 Guest Maximum</li>
+        <li>All Essential Amenities</li>
+        <li>Base Rate Pricing</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-roomcard ">
+<div class="card double">
+    <p class="popular text-center">More Popular</p>
+  <img src="{{ url_for('static', filename='images/double_room.webp') }}" class="d-block w-100  c-roomimage c-roomimagedbl" alt="sliderimage1">
+  
+  <div class="card-body">
+    <h5 class="text-center py-2">Double Room</h5>
+    <p class="card-text">Ideal for couples with enhanced space and amenities.</p>
+    <ul>
+        <li>Up to 2 Guests</li>
+        <li>Premium Amenities</li>
+        <li>20% More Space</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-12 mb-4 c-roomcard">
+<div class="card">
+  <img src="{{ url_for('static', filename='images/family_room.jpg') }}" class="d-block w-100  c-roomimage" alt="sliderimage1">
+  
+  <div class="card-body">
+    <h5 class="text-center py-2">Family Room</h5>
+    <p class="card-text">Spacious suite perfect for families traveling <br> together.</p>
+    <ul>
+        <li>Up to 4 Guests</li>
+        <li>Family Amenities</li>
+        <li>50% More Space</li>
+    </ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<section>
+  <div class="search py-5 mb-0">
+    <h3 class="text-center text-bold fs-4 fs-md-3 fs-lg-2 text-light ">Ready to Book Your Stay?</h3>
+    <p class="text-center py-2 mb-4 text-light ">Join thousands of satisfied guests who have experienced luxury at World Hotels</p>
+    <div class="text-center">
+      <a href="{{url_for('search.search')}}" class="btn btn-light btn-lg text-bolder fs-6 text-success" type="submit">Start Your Journey</a>
+    </div>
+  </div>
+</section>
+
+{% endblock main %}
+
+
+
+    
+
+    
+
+
+
+
+
+          
+         
+
+    
+
+
+

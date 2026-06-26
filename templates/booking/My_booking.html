@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf_input %}
+{% block head %}My booking{% endblock head %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('static',filename='my_booking.css')}}" />
+{% endblock %}
+
+{% block main %}
+<div class="container py-5 my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1"><i class="fas fa-calendar-check me-2 text-primary"></i>My Bookings</h3>
+            <p class="text-muted mb-0">Total Active: <span class="fw-semibold">{{ my_booking|length }}</span></p>
+        </div>
+        <a href="{{ url_for('booking.booking_history') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-history me-1"></i> View History
+        </a>
+    </div>
+
+    
+    {#<form action="http://127.0.0.1:5003/cancel-booking/113" method="POST">
+      <input type="submit" value="Click Here!">
+    </form>#}
+
+    {% if my_booking %}
+    <div class="card">
+         <div class="card-body table-responsive-global p-0">
+             <table class="table table-striped table-bordered table-hover mb-0 w-100">
+                <thead>
+                     <tr>
+                        <th>Booking Code</th>
+                        <th>Room ID</th>
+                        <th>Dates</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Time Left</th>
+                        <th>Action</th>
+                        <th>Booked On</th>
+                        <th>View Receipt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in my_booking %}
+                    <tr class="booking-row" data-status="{{ booking.status }}">
+                        <td class="fw-semibold" data-label="Booking Code">{{ booking.booking_code }}</td>
+                        <td data-label="Room ID"><div class="fw-semibold">{{ booking.room_id }}</div></td>
+                        <td class="small" data-label="Dates">
+                            <div class="text-success">In: {{ booking.check_in_date }}</div>
+                            <div class="text-danger">Out: {{ booking.check_out_date }}</div>
+                        </td>
+                        <td class="fw-bold" data-label="Currency">{{ booking.currency }}{{ booking.total_price }}</td>
+                        <td data-label="Status">
+                            {% if booking.status == 'confirmed' %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3">
+                                    <i class="fa-solid fa-check-circle me-1"></i> Confirmed
+                                </span>
+                            {% elif booking.status == 'pending' %}
+                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3">
+                                    <i class="fa-solid fa-clock me-1"></i> Pending
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="timer-cell" data-label="Time Left" data-expiry="{{ booking.expires_at.isoformat() if booking.status == 'pending' else '' }}">
+                            {% if booking.status == 'pending' %}
+                                <span class="countdown-text text-danger fw-bold timer-text">--:--</span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Action">
+                            {% if booking.status == 'pending' %}
+                                <a href="{{ url_for('payment.payment', booking_code=booking.booking_code) }}" 
+                                   class="btn btn-sm btn-primary shadow-sm pay-btn w-100">
+                                    <i class="fa-solid fa-wallet me-1"></i> Pay Now
+                                </a>
+                            {% elif booking.status == 'confirmed' %}
+                                <button class="btn btn-sm btn-outline-danger" 
+                                        onclick="openCancelModal('{{booking.id}}', '{{booking.currency}}')"
+                                    <i class="fas fa-times me-1"></i> Cancel
+                                </button>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small" data-label="Booked ON" >
+                            {{ booking.booking_date.strftime('%d %b %Y') if booking.booking_date else 'N/A' }}
+                        </td>
+                        <td data-label="View Receipt">
+                            {% if booking.status == 'confirmed' %}
+                                <a href="{{ url_for('booking.view_receipt', booking_code=booking.booking_code) }}" 
+                                target="_blank" 
+                                class="btn btn-sm btn-outline-info">
+                                    <i class="fas fa-file-invoice-dollar me-1"></i> Receipt
+                                </a>
+                           {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5 card border bg-body-tertiary">
+        <div class="card-body">
+            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+            <h4 class="fw-bold">No active bookings found</h4>
+            <p class="text-muted">You haven't made any bookings yet. Start exploring our luxury hotels today!</p>
+            <a href="{{url_for('search.search')}}" class="btn btn-primary px-4 mt-2">Browse Hotels</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold">Confirm Cancellation</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="mb-3 text-dark">Are you sure you want to cancel this booking? Based on our policy, the following charges apply:</p>
+                <div class="modal-details-box">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-dark">Notice Period:</span>
+                        <span id="cancel-days" class="fw-bold text-dark">--</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 text-danger">
+                        <span class="text-dark">Cancellation Fee:</span>
+                        <span class="fw-bold text-dark">
+                            <span id="cancel-currency-fee" class="text-dark" >
+                            </span> <span id="cancel-fee" class="text-dark">--</span>
+                        </span>
+                                
+                  
+                    </div>
+                    <div class="d-flex justify-content-between text-success pt-2 border-top">
+                        <span class="text-dark">Refund Amount:</span>
+                        <span class="fw-bold text-dark">
+                            <span id="cancel-currency-refund" class="text-dark"></span>
+                             <span id="cancel-refund" class="text-dark">--</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Keep Booking</button>
+                <form id="confirmCancelForm" method="POST">
+                    {{ csrf_input() }}
+                    <button type="submit" class="btn btn-danger px-4">Confirm Cancellation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    
+    function openCancelModal(bookingId,currency) {
+        
+        fetch(`/get-cancellation-details/${bookingId}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('cancel-days').innerText = data.days + " days before check-in";
+                document.getElementById('cancel-fee').innerText = data.fee.toFixed(2);
+                document.getElementById('cancel-refund').innerText = data.refund.toFixed(2);
+
+                document.getElementById('cancel-currency-fee').innerText = currency;
+                document.getElementById('cancel-currency-refund').innerText = currency;
+                
+               
+                document.getElementById('confirmCancelForm').action = `/cancel-booking/${bookingId}`;
+                
+                let noticeText = data.days < 0 ? "Past Check-in" : `${data.days} days`;
+                document.getElementById('cancel-days').innerText = noticeText;
+                
+               
+                var myModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+                myModal.show();
+            })
+            .catch(err => alert("Error fetching cancellation details."));
+    }
+
+   
+    function updateAllTimers() {
+        const now = new Date().getTime();
+        document.querySelectorAll('.timer-cell').forEach(cell => {
+            const expiryStr = cell.getAttribute('data-expiry');
+            if (!expiryStr) return;
+            const expiryDate = new Date(expiryStr).getTime();
+            const distance = expiryDate - now;
+            const textSpan = cell.querySelector('.countdown-text');
+            const row = cell.closest('tr');
+            const payBtn = row.querySelector('.pay-btn');
+
+            if (distance < 0) {
+                textSpan.innerHTML = "EXPIRED";
+                if (payBtn) payBtn.classList.add('disabled', 'btn-secondary');
+                return;
+            }
+
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            textSpan.innerHTML = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        });
+    }
+    setInterval(updateAllTimers, 1000);
+    updateAllTimers();
+</script>
+{% endblock main %}
